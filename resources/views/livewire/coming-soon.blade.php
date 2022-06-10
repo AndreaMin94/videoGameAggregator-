@@ -1,5 +1,5 @@
 <div wire:init="loadComingSoonGames" class="coming-soon-container space-y-10 mt-8">
-    @foreach($comingSoonGames as $game)
+    @forelse($comingSoonGames as $game)
     <div class="game flex">
         <a href="#">
             <img src="{{Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'])}}"
@@ -12,5 +12,7 @@
             </p>
         </div>
     </div>
-    @endforeach
+    @empty
+    <x-utils.spinner/>
+    @endforelse
 </div>

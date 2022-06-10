@@ -1,5 +1,5 @@
 <div wire:init="loadMostAnticipated"  class="most-anticipated-container space-y-10 mt-8">
-    @foreach($mostAnticipated as $game)
+    @forelse($mostAnticipated as $game)
     <div class="game flex">
     <a href="#">
         <img src="{{Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'])}}" alt="game cover" class="w-16 hover:opacity-75 transition ease-in-out duration-150">
@@ -11,5 +11,7 @@
             </p>
         </div>
     </div>
-    @endforeach
+    @empty
+    <x-utils.spinner/>
+    @endforelse
 </div>

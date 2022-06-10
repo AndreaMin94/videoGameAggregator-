@@ -22,18 +22,7 @@ class GamesController extends Controller
 
 
 
-        $recentlyReviewed = Http::withHeaders([
-            'Client-ID' => env('IGDB_CLIENT_ID'),
-            'Authorization' => 'Bearer ' . $response['access_token']
-        ])->withBody(
-                "fields name, cover.url, first_release_date, platforms.abbreviation, rating, slug, rating_count, summary;
-                where platforms = (48, 49, 130, 6)
-                & (first_release_date >= {$before}
-                & first_release_date < {$currentDate}
-                );
-                sort total_rating_count desc;
-                limit 3;", "text/plain"
-        )->post('https://api.igdb.com/v4/games')->json();
+
 
         $mostAnticipated = Http::withHeaders([
             'Client-ID' => env('IGDB_CLIENT_ID'),
@@ -57,7 +46,7 @@ class GamesController extends Controller
         )->post('https://api.igdb.com/v4/games')->json();
 
         // return view('welcome', compact('popularGames', 'recentlyReviewed', 'mostAnticipated', 'comingSoon'));
-        return view('welcome', compact('recentlyReviewed', 'mostAnticipated', 'comingSoon', 'accessToken'));
+        return view('welcome', compact('mostAnticipated', 'comingSoon', 'accessToken'));
     }
 
     public static function mergeSortGames($games){

@@ -14,23 +14,13 @@ class GamesController extends Controller
             'https://id.twitch.tv/oauth2/token',
             config('services.igdb')
         )->json();
-
+        $accessToken = $response['access_token'];
         $before = Carbon::now()->subMonths(2)->timestamp;
         $after = Carbon::now()->addMonths(2)->timestamp;
         $afterFourMonths = Carbon::now()->addMonths(4)->timestamp;
         $currentDate = Carbon::now()->timestamp;
-        $popularGames = Http::withHeaders([
-            'Client-ID' => env('IGDB_CLIENT_ID'),
-            'Authorization' => 'Bearer ' . $response['access_token']
-        ])->withBody(
-                "fields name, cover.url, first_release_date, platforms.abbreviation, rating, slug, total_rating_count;
-                where platforms = (48, 49, 130, 6)
-                & (first_release_date >= {$before}
-                & first_release_date < {$after}
-               );
-                sort rating_count desc;
-                limit 12;", "text/plain"
-        )->post('https://api.igdb.com/v4/games')->json();
+
+
 
         $recentlyReviewed = Http::withHeaders([
             'Client-ID' => env('IGDB_CLIENT_ID'),
@@ -66,7 +56,8 @@ class GamesController extends Controller
                 limit 5;", "text/plain"
         )->post('https://api.igdb.com/v4/games')->json();
 
-        return view('welcome', compact('popularGames', 'recentlyReviewed', 'mostAnticipated', 'comingSoon'));
+        // return view('welcome', compact('popularGames', 'recentlyReviewed', 'mostAnticipated', 'comingSoon'));
+        return view('welcome', compact('recentlyReviewed', 'mostAnticipated', 'comingSoon', 'accessToken'));
     }
 
     public static function mergeSortGames($games){

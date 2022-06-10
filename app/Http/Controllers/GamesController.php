@@ -20,21 +20,6 @@ class GamesController extends Controller
         $afterFourMonths = Carbon::now()->addMonths(4)->timestamp;
         $currentDate = Carbon::now()->timestamp;
 
-
-
-
-
-        $mostAnticipated = Http::withHeaders([
-            'Client-ID' => env('IGDB_CLIENT_ID'),
-            'Authorization' => 'Bearer ' . $response['access_token']
-        ])->withBody(
-                "fields name, cover.url, first_release_date, platforms.abbreviation, rating,total_rating_count, total_rating;
-                where platforms = (48, 49, 130, 6)
-                ;
-                sort total_rating_count desc;
-                limit 4;", "text/plain"
-        )->post('https://api.igdb.com/v4/games')->json();
-
         $comingSoon = Http::withHeaders([
             'Client-ID' => env('IGDB_CLIENT_ID'),
             'Authorization' => 'Bearer ' . $response['access_token']
@@ -45,8 +30,8 @@ class GamesController extends Controller
                 limit 5;", "text/plain"
         )->post('https://api.igdb.com/v4/games')->json();
 
-        // return view('welcome', compact('popularGames', 'recentlyReviewed', 'mostAnticipated', 'comingSoon'));
-        return view('welcome', compact('mostAnticipated', 'comingSoon', 'accessToken'));
+
+        return view('welcome', compact('comingSoon', 'accessToken'));
     }
 
     public static function mergeSortGames($games){

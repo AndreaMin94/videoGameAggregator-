@@ -2,7 +2,7 @@
     @forelse($comingSoonGames as $game)
     <div class="game flex">
         <a href="#">
-            <img src="{{Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'])}}"
+            <img src="{{isset($game['cover']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : ''}}"
                 alt="game cover" class="w-16 hover:opacity-75 transition ease-in-out duration-150">
         </a>
         <div class="ml-6">

@@ -26,6 +26,19 @@
         </div>
     </div>
     @empty
-    <x-utils.spinner/>
+    <!-- <x-utils.spinner/> -->
+        @foreach(range(1, 12) as $game)
+        <div class="game mt-8">
+            <div class="relative inline-block">
+                <div class="bg-gray-800 w-48 h-56">
+
+                </div>
+            </div>
+            <div class="block text-base rounded mt-4 text-transparent font-semibold leading-tight bg-gray-700">title goes</div>
+            <div class="text-transparent rounded bg-gray-700 mt-2 inline-block">
+                PS5, X-BOX
+            </div>
+        </div>
+        @endforeach
     @endforelse
 </div> <!-- end popular games-->

@@ -577,6 +577,9 @@ Ensure the default browser behavior of the `hidden` attribute.
 .w-14 {
   width: 3.5rem;
 }
+.w-56 {
+  width: 14rem;
+}
 .flex-none {
   flex: none;
 }

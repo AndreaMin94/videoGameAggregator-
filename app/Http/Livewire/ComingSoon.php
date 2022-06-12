@@ -22,7 +22,7 @@ class ComingSoon extends Component
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => 'Bearer ' . $this->accessToken
             ])->withBody(
-                    "fields name, cover.url, first_release_date, platforms.abbreviation, rating;
+                    "fields name, slug, cover.url, first_release_date, platforms.abbreviation, rating;
                     where platforms = (48, 49, 130, 6)
                     & (first_release_date >= {$currentDate});
                     limit 5;", "text/plain"

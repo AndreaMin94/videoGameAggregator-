@@ -7,7 +7,7 @@
         <div class="ml-6">
             <a href="{{route('games.show', $game['slug'])}}" class="hover:text-gray-300">{{ $game['name']}}</a>
             <p class="text-gray-400 text-sm mt-1">
-                {{ Illuminate\Support\Carbon::createFromTimestamp($game['first_release_date'])->format('d/m/y')}}
+                {{ $game['first_release_date']}}
             </p>
         </div>
     </div>

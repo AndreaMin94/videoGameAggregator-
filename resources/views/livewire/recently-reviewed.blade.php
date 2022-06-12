@@ -8,7 +8,7 @@
             <!-- <div class="relative flex-none"></div> -->
             <div class="game mt-8">
                 <div class="relative flex-none">
-                    <a href="#">
+                    <a href="{{route('games.show', $game['slug'])}}">
                         <img src="{{isset($game['cover']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : ''}}" alt="game cover" class="w-48 hover:opacity-75 transition ease-in-out duration-150">
                     </a>
                     @if(isset($game['rating']))
@@ -21,7 +21,7 @@
                 </div>
             </div>
             <div class="ml-12">
-                    <a href="#" class="block text-large font-semibold leading-tight hover:text-gray-400 mt-8">{{ $game['name']}}</a>
+                    <a href="{{route('games.show', $game['slug'])}}" class="block text-large font-semibold leading-tight hover:text-gray-400 mt-8">{{ $game['name']}}</a>
                     <div class="text-gray-400 mt-1">
                         @foreach($game['platforms'] as $platform)
                             {{ $platform['abbreviation'] ?? '' }},

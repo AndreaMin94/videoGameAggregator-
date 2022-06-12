@@ -27,7 +27,7 @@ class GamesController extends Controller
         )->json();
         $accessToken = $response['access_token'];
 
-        $game = Cache::remember('game', 10, function()use($accessToken, $slug){
+        $game = Cache::remember('game', 3, function()use($accessToken, $slug){
             return Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => 'Bearer ' . $accessToken

@@ -7,13 +7,17 @@
 
         <livewire:popular-games :accessToken="$accessToken"/>
 
+
         <div class="flex flex-col lg:flex-row my-10">
+
             <livewire:recently-reviewed :accessToken="$accessToken"/>
+
             <div class="most-anticipated
                 lg:w-1/4
                 sm:mt-8"
                 >
                 <h2 class="text-blue-500 uppercase tracking-wide font-semibold">Most Anticipated</h2>
+
                 <livewire:most-anticipated :accessToken="$accessToken"/>
 
                 <h2 class="text-blue-500 uppercase tracking-wide font-semibold mt-14">Coming Soon</h2>

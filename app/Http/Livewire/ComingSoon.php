@@ -16,8 +16,8 @@ class ComingSoon extends Component
     {
         $currentDate = Carbon::now()->timestamp;
 
-        $this->comingSoonGames = Cache::remember('popularGames', 10, function()use($currentDate){
-            Http::withHeaders([
+        $this->comingSoonGames = Cache::remember('comingSoonGames', 10, function()use($currentDate){
+            return Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => 'Bearer ' . $this->accessToken
             ])->withBody(

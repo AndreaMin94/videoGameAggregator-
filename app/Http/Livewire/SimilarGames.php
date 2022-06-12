@@ -11,7 +11,7 @@ class SimilarGames extends Component
     public $similarGames = [];
     public $accessToken;
     public $slug;
-    public $loading = false;
+    public $loading = true;
 
     public function loadSimilarGames(){
         $this->loading = true;

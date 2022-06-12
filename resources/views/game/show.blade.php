@@ -33,7 +33,7 @@
                         <div class="w-16 h-16 bg-gray-800 rounded-full">
                             <div class="font-semibold text-xs flex justify-center items-center h-full">
                                 @if(isset($game['rating']))
-                                    {{ $game['rating'] . '%' }}
+                                    {{ round($game['rating']) . '%' }}
                                 @else
                                     0%
                                 @endif
@@ -68,12 +68,14 @@
                     {{ $game['summary'] }}
                     @endif
                 </p>
+                @if(isset($game['videos']))
                 <div class="mt-12">
-                    <button class="flex justify-center items-center bg-blue-500 text-white font-semibold p-4 hover:bg-blue-600 rounded transition ease-in-out duration-1">
+                    <a href="https://youtube.com/watch/{{ $game['videos'][0]['video_id'] }}" class="inline-flex justify-center items-center bg-blue-500 text-white font-semibold p-4 hover:bg-blue-600 rounded transition ease-in-out duration-1">
                         <i class="fa-solid fa-circle-play"></i>
                         <span class="ml-2"> Play Trailer</span>
-                    </button>
+                    </a>
                 </div>
+                @endif
             </div>
         </div> <!-- end came details-->
         <div class="images-container border-b border-gray-800 pb-12 mt-8">

@@ -17,12 +17,12 @@ class RecentlyReviewed extends Component
         $before = Carbon::now()->subMonths(2)->timestamp;
         $currentDate = Carbon::now()->timestamp;
 
-        $this->recentlyReviewed =  Cache::remember('popularGames', 10, function()use($currentDate, $before){
-            Http::withHeaders([
+        $this->recentlyReviewed =  Cache::remember('recentlyReviewed', 10, function()use($currentDate, $before){
+            return Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => 'Bearer ' . $this->accessToken
             ])->withBody(
-                    "fields name, cover.url, first_release_date, platforms.abbreviation, rating, slug, rating_count, summary;
+                    "fields name, slug, cover.url, first_release_date, platforms.abbreviation, rating, slug, rating_count, summary;
                     where platforms = (48, 49, 130, 6)
                     & (first_release_date >= {$before}
                     & first_release_date < {$currentDate}

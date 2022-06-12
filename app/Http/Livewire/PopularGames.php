@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
@@ -19,7 +20,7 @@ class PopularGames extends Component
         // $before = Carbon::create(2018, 1, 31, 0)->timestamp;
         // $after = Carbon::create(2018, 12, 31, 0)->timestamp;
 
-        $this->popularGames = Cache::remember('popularGames', 10, function()use($before, $after){
+        $popularGamesUnformatted = Cache::remember('popularGames', 10, function()use($before, $after){
             return Http::withHeaders([
                 'Client-ID' => env('IGDB_CLIENT_ID'),
                 'Authorization' => 'Bearer ' . $this->accessToken
@@ -35,7 +36,21 @@ class PopularGames extends Component
             ->json();
         });
 
+        // dump($this->formatForView($popularGamesUnformatted));
+
         // dd($this->popularGames);
+        $this->popularGames = $this->formatForView($popularGamesUnformatted);
+    }
+
+    public function formatForView($games)
+    {
+        return collect($games)->map(function ($game) {
+            return collect($game)->merge([
+                'coverImageUrl' => isset($game['cover']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : '',
+                'rating' => isset($game['rating']) ? round($game['rating']) . "%" : "0%",
+                'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', ')
+            ]);
+        })->toArray();
     }
 
     public function mount($accessToken)

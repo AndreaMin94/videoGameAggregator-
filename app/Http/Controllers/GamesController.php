@@ -51,7 +51,9 @@ class GamesController extends Controller
     private function formatGameForView($game)
     {
         $temp = collect($game)->merge([
-            'coverImageUrl' => isset($game['cover']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : '',
+            'coverImageUrl' => isset($game['cover']) ?
+                Str::replaceFirst('thumb', 'cover_big', $game['cover']['url'])
+                : 'https://via.placeholder.com/264x352',
             'genres' => collect($game['genres'])->pluck('name')->implode(', '),
             'involved_companies' => isset($game[ 'involved_companies']) ?  $game['involved_companies'][0]['company']['name'] : '',
             'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
@@ -59,9 +61,11 @@ class GamesController extends Controller
             'rating_count' => isset($game['rating_count']) ? round($game['rating_count']) . '%' : '0%',
             'storyline' => $this->checkAndReturnDescription($game['storyline'] ?? null, $game['summary'] ?? null),
             'trailer' => isset($game['videos']) ? "https://youtube.com/watch/{$game['videos'][0]['video_id']}" : null,
-            'screenshots' => isset($game['screenshots']) ? $this->generateUrlScreenshots($game['screenshots']) : null
+            'screenshots' => isset($game['screenshots']) ? $this->generateUrlScreenshots($game['screenshots']) : null,
+            'releasedDate' => isset($game['first_release_date']) ?
+                "Released : " . Carbon::createFromTimestamp($game['first_release_date'])->format('d/m/y')
+                : null,
         ]);
-        dump($temp);
         return $temp;
     }
 

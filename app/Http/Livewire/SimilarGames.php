@@ -3,6 +3,7 @@
 namespace App\Http\Livewire;
 
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
@@ -39,13 +40,28 @@ class SimilarGames extends Component
         });
 
         if(array_key_exists('similar_games',$this->similarGames)){
-            $this->similarGames = $this->similarGames['similar_games'];
+            $this->similarGames = $this->formatForView($this->similarGames['similar_games']);
         } else {
             $this->similarGames = [];
         }
         $this->loading = false;
+    }
 
-        // dump($this->similarGames);
+    public function formatForView($games)
+    {
+        return collect($games)->map(function ($game) {
+            return collect($game)->merge([
+                'coverImageUrl' => isset($game['cover']) ?
+                    Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) :
+                    'https://via.placeholder.com/264x352',
+                'totalRating' => isset($game['total_rating']) ?
+                    round($game['total_rating']) . '%'
+                    : '0%',
+                'platforms' => isset($game['platforms']) ?
+                    collect($game['platforms'])->pluck('abbreviation')->implode(', ')
+                    : null,
+            ]);
+        })->toArray();
     }
 
     public function mount($slug){

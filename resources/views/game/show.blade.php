@@ -15,6 +15,8 @@
                     <span>{{$game['involved_companies']}}</span>
                     &middot;
                     <span>{{$game['platforms']}}</span>
+                    &middot;
+                    <span>{{$game['releasedDate']}}</span>
                 </div>
                 <div class="flex flex-wrap items-center mt-8">
                     <div class="flex items-center">

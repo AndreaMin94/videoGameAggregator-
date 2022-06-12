@@ -84,8 +84,8 @@
                 @if(isset($game['screenshots']))
                     @foreach($game['screenshots'] as $img)
                     <div>
-                        <a href="">
-                            <img src="{{ $img['url']}}" alt="" class="hover:opacity-75 transition ease-in-out duration-1">
+                        <a href="{{Str::replaceFirst('thumb', 'screenshot_big', $img['url'])}}">
+                            <img src="{{Str::replaceFirst('thumb', 'screenshot_big', $img['url'])}}" alt="" class="hover:opacity-75 transition ease-in-out duration-1">
                         </a>
                     </div>
                     @endforeach

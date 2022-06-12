@@ -7,7 +7,7 @@
             <div class="relative inline-block">
                 <a href="#">
                     @if(isset($game['cover']))
-                    <img src="{{ $game['cover']['url']}}" alt="game cover" class="hover:opacity-75 transition ease-in-out duration-150">
+                    <img src="{{isset($game['cover']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : '/img/tlou.jpg'}}" alt="game cover" class="hover:opacity-75 transition ease-in-out duration-150">
                     @endif
                 </a>
                 @if(isset($game['total_rating']))
@@ -19,7 +19,13 @@
                 @endif
             </div>
             <a href="#" class="block text-base font-semibold leading-tight hover:text-gray-400 mt-8">{{ $game['name']}}</a>
-            <div class="text-gray-400 mt-1">PlayStation 4</div>
+            @if(isset($game['platforms']))
+            <div class="text-gray-400 mt-1">
+                @foreach($game['platforms'] as $platform)
+                    {{$platform['abbreviation'] ?? ''}}
+                @endforeach
+            </div>
+            @endif
         </div>
         @empty
             @if($loading)

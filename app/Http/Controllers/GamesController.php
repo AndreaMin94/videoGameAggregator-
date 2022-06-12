@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
@@ -39,9 +40,49 @@ class GamesController extends Controller
         });
         // dd($game);
         abort_if(!$game, 404);
-        return view('game.show', ['game' => $game[0]]);
+        return view(
+            'game.show',
+            [
+                'game' => $this->formatGameForView($game[0])
+            ]
+        );
     }
 
+    private function formatGameForView($game)
+    {
+        $temp = collect($game)->merge([
+            'coverImageUrl' => isset($game['cover']) ? Str::replaceFirst('thumb', 'cover_big', $game['cover']['url']) : '',
+            'genres' => collect($game['genres'])->pluck('name')->implode(', '),
+            'involved_companies' => isset($game[ 'involved_companies']) ?  $game['involved_companies'][0]['company']['name'] : '',
+            'platforms' => collect($game['platforms'])->pluck('abbreviation')->implode(', '),
+            'rating' => isset($game['rating']) ? round($game['rating']) . '%' : '0%',
+            'rating_count' => isset($game['rating_count']) ? round($game['rating_count']) . '%' : '0%',
+            'storyline' => $this->checkAndReturnDescription($game['storyline'] ?? null, $game['summary'] ?? null),
+            'trailer' => isset($game['videos']) ? "https://youtube.com/watch/{$game['videos'][0]['video_id']}" : null,
+            'screenshots' => isset($game['screenshots']) ? $this->generateUrlScreenshots($game['screenshots']) : null
+        ]);
+        dump($temp);
+        return $temp;
+    }
+
+    public function generateUrlScreenshots($screenshots)
+    {
+        return collect($screenshots)->map(function($image){
+            return Str::replaceFirst('thumb', 'screenshot_big', $image['url']);
+        });
+    }
+
+    public function checkAndReturnDescription($storyline = null, $summary = null)
+    {
+        if(!$storyline && !$summary){
+            return '';
+        }
+        if($storyline){
+            return $storyline;
+        } else if($summary) {
+            return $summary;
+        }
+    }
 
     public static function mergeSortGames($games){
         if(count($games) < 2){

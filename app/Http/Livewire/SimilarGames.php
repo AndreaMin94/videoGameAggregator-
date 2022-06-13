@@ -20,7 +20,7 @@ class SimilarGames extends Component
             config('services.igdb')
         )->json()['access_token'];
 
-        $this->similarGames = Cache::remember(
+        $unformattedGames = Cache::remember(
             'similarGames', 10,
             function() {
                 return Http::withHeaders([
@@ -42,8 +42,8 @@ class SimilarGames extends Component
         );
         $this->loading = false;
 
-        if(array_key_exists('similar_games',$this->similarGames)){
-            return $this->formatForView($this->similarGames['similar_games']);
+        if(array_key_exists('similar_games',$unformattedGames)){
+            return $this->formatForView($unformattedGames['similar_games']);
         } else {
             return [];
         }

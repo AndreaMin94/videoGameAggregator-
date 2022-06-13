@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Cache;
 
 class RecentlyReviewed extends Component
 {
-    public $recentlyReviewed = [];
     public $accessToken;
 
     public function loadRecentlyReviewedGames()
@@ -18,24 +17,25 @@ class RecentlyReviewed extends Component
         $before = Carbon::now()->subMonths(2)->timestamp;
         $currentDate = Carbon::now()->timestamp;
 
-         $unformattedGames =  Cache::remember('recentlyReviewed', 10, function()use($currentDate, $before){
-            return Http::withHeaders([
-                'Client-ID' => env('IGDB_CLIENT_ID'),
-                'Authorization' => 'Bearer ' . $this->accessToken
-            ])->withBody(
-                    "fields name, slug, cover.url, first_release_date, platforms.abbreviation, rating, slug, rating_count, summary;
-                    where platforms = (48, 49, 130, 6)
-                    & (first_release_date >= {$before}
-                    & first_release_date < {$currentDate}
-                    );
-                    sort total_rating_count desc;
-                    limit 3;", "text/plain"
-            )->post('https://api.igdb.com/v4/games')
-            ->json();
-        });
-
-        $this->recentlyReviewed = $this->formatForView($unformattedGames);
-
+         $unformattedGames =  Cache::remember(
+            'recentlyReviewed', 10,
+            function() use($currentDate, $before) {
+                return Http::withHeaders([
+                    'Client-ID' => env('IGDB_CLIENT_ID'),
+                    'Authorization' => 'Bearer ' . $this->accessToken
+                ])->withBody(
+                        "fields name, slug, cover.url, first_release_date, platforms.abbreviation, rating, slug, rating_count, summary;
+                        where platforms = (48, 49, 130, 6)
+                        & (first_release_date >= {$before}
+                        & first_release_date < {$currentDate}
+                        );
+                        sort total_rating_count desc;
+                        limit 3;", "text/plain"
+                )->post('https://api.igdb.com/v4/games')
+                ->json();
+            }
+        );
+        return $this->formatForView($unformattedGames);
     }
 
     public function formatForView($games)
@@ -58,6 +58,10 @@ class RecentlyReviewed extends Component
 
     public function render()
     {
-        return view('livewire.recently-reviewed');
+        return view('livewire.recently-reviewed',
+            [
+                'recentlyReviewed' => $this->loadRecentlyReviewedGames()
+            ]
+        );
     }
 }

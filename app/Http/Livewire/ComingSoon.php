@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Cache;
 
 class ComingSoon extends Component
 {
-    public $comingSoonGames = [];
     public $accessToken;
 
     public function loadComingSoonGames()
@@ -29,7 +28,7 @@ class ComingSoon extends Component
             )->post('https://api.igdb.com/v4/games')
             ->json();
         });
-        $this->comingSoonGames = $this->formatForView($unformattedGames);
+        return $this->formatForView($unformattedGames);
     }
 
     public function formatForView($games)
@@ -51,6 +50,10 @@ class ComingSoon extends Component
 
     public function render()
     {
-        return view('livewire.coming-soon');
+        return view('livewire.coming-soon',
+            [
+                'comingSoonGames' => $this->loadComingSoonGames()
+            ]
+        );
     }
 }
